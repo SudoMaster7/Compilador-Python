@@ -6,6 +6,7 @@ Para 5 + 10, o lexer deve produzir algo como:
 '''
 import re
 from collections import namedtuple
+from typing import List, Tuple
 
 # 1.Definir os tipos de tokens que nossa linguagem reconhece
 Token = namedtuple('Token', ['type', 'value'])
@@ -25,7 +26,7 @@ TOKEN_TYPES = [
 ]
 
 # 2. Criar expressão regular mestre para encontrar todos os tokens
-def get_master_regex(token_types):
+def get_master_regex(token_types: List[Tuple[str, str]]) -> str:
     # Une todas as expressão regulares em uma só, com grupos nomeados
     # Ex: (?P<INTEGER>\d+)|(?P<PLUS>\+)|...
     return '|'.join(f'(?P<{pair[0]}>{pair[1]})' for pair in token_types)
@@ -33,7 +34,7 @@ def get_master_regex(token_types):
 master_regex = get_master_regex(TOKEN_TYPES)
 
 # 3. A função principal do Lexer
-def lexer(code):
+def lexer(code: str) -> List[Token]:
     """
     Recebe uma string de código e gera uma sequência de tokens.
     """
@@ -55,12 +56,12 @@ def lexer(code):
 
     return tokens
 
-# -- TESTANDO NOSSO LEXER ---
-codigo_exemplo = "resultado1 = (10 + 25) * 3"
-tokens_gerados = lexer(codigo_exemplo)
-
-print(f"Códigos Fonte> '{codigo_exemplo}'")
-print("Tokens Gerados: ")
-for token in tokens_gerados:
-    print(token)
+if __name__ == "__main__":
+    # -- TESTANDO NOSSO LEXER ---
+    codigo_exemplo = "resultado1 = (10 + 25) * 3"
+    tokens_gerados = lexer(codigo_exemplo)
     
+    print(f"Código Fonte> '{codigo_exemplo}'")
+    print("Tokens Gerados: ")
+    for token in tokens_gerados:
+        print(token)
